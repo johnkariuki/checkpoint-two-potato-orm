@@ -20,6 +20,12 @@ class DatabaseConnection
     protected static $dbConfig = [];
 
     /**
+     * PDO connection
+     * @var object
+     */
+    protected static $connection;
+
+    /**
      * Constructor
      *
      * Load .env package by https://github.com/vlucas/phpdotenv
@@ -57,12 +63,12 @@ class DatabaseConnection
 
             if (self::$dbConfig["driver"] === "sqlite") {
 
-                $connection = new PDO(
+                self::$connection = new PDO(
                     "sqlite:" . self::$dbConfig["database"]
                 );
             } else {
 
-                $connection = new PDO(
+                self::$connection = new PDO(
                     self::$dbConfig["dsn"],
                     self::$dbConfig["username"],
                     self::$dbConfig["password"]
@@ -70,14 +76,20 @@ class DatabaseConnection
 
             }
 
-            $connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            self::$connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
         } catch (PDOException $e) {
 
             echo $e->getMessage();
         }
 
-        return $connection;
+        return self::$connection;
+    }
+
+    public static function close()
+    {
+        self::$connection = null;
+        return null;
     }
 
     /**
