@@ -57,14 +57,13 @@ class DatabaseConnection
     public static function connect()
     {
         new static;
-        self::configConnection();
+        self::configDsn();
 
         try {
 
             if (self::$dbConfig["driver"] === "sqlite") {
-
                 self::$connection = new PDO(
-                    "sqlite:" . self::$dbConfig["database"]
+                    self::$dbConfig["dsn"]
                 );
             } else {
 
@@ -97,7 +96,7 @@ class DatabaseConnection
      *
      * @return void
      */
-    public static function configConnection()
+    public static function configDsn()
     {
         switch (self::$dbConfig["driver"]) {
 
@@ -110,9 +109,11 @@ class DatabaseConnection
                 $dsn = "pgsql:host=" . self::$dbConfig['host'];
                 $dsn .= ";port=". self::$dbConfig['port'] .";dbname=" . self::$dbConfig['database'];
                 break;
+            case "sqlite":
+                $dsn = "sqlite:" . self::$dbConfig["database"];
+                break;
             default:
-                $dsn = "pgsql:host=" . self::$dbConfig['host'];
-                $dsn .= ";port=". self::$dbConfig['port'] .";dbname=" . self::$dbConfig['database'];
+                $dsn = "sqlite:" . self::$dbConfig["database"];
                 break;
         }
 
