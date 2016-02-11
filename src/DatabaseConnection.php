@@ -15,12 +15,14 @@ class DatabaseConnection
 {
     /**
      * Associative array of Database configuratioon settings
+     *
      * @var array
      */
     protected static $dbConfig = [];
 
     /**
      * PDO connection
+     *
      * @var object
      */
     protected static $connection;
@@ -85,6 +87,11 @@ class DatabaseConnection
         return self::$connection;
     }
 
+    /**
+     * Terminate database connection
+     *
+     * @return null close PDO DATABASE connection
+     */
     public static function close()
     {
         self::$connection = null;

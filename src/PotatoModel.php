@@ -23,14 +23,14 @@ class PotatoModel extends DatabaseConnection
     protected static $table;
 
     /**
-     * Unique ID value from Child Class
+     * Unique ID field from Child Class
      *
      * @var [type]
      */
     protected static $uniqueId;
 
      /**
-     * Contains unique ID value
+     * Contains the unique ID value
      *
      * @var null
      */
@@ -61,6 +61,11 @@ class PotatoModel extends DatabaseConnection
      */
     protected static $update = false;
 
+    /**
+     * Create database connection
+     *
+     * Get all things up and running
+     */
     public function __construct()
     {
         if (is_null(self::$connection)) {
@@ -71,8 +76,8 @@ class PotatoModel extends DatabaseConnection
     /**
      * Add the value set in the child class a key value pair to the $data array
      *
-     * @param [type] $key   Contains the name of the field e.g firstName
-     * @param [type] $value Contains the value of the field e.g John
+     * @param string      $key       Contains the name of the field e.g firstName
+     * @param string/int  $value     Contains the value of the field e.g John
      */
     public function __set($key, $value)
     {
@@ -172,9 +177,9 @@ class PotatoModel extends DatabaseConnection
      * Takes an ID parameter, deletes from the table where the unique ID
      * matches the ID parameter
      *
-     * @param  integer $id a unique ID from the table
+     * @param  integer $id  a unique ID from the table
      *
-     * @return boolean     should return true or false based on
+     * @return boolean      should return true or false based on
      *                     whether it was deleted or not
      */
     public static function destroy($fieldId)
