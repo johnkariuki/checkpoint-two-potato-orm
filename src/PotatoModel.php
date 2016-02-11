@@ -42,7 +42,7 @@ class PotatoModel extends DatabaseConnection
      *
      * @var Object
      */
-    protected static $connection;
+    protected static $connection = null;
 
     /**
      * Associative array that contains the name of each field and value
@@ -60,6 +60,13 @@ class PotatoModel extends DatabaseConnection
      * @var boolean
      */
     protected static $update = false;
+
+    public function __construct()
+    {
+        if (is_null(self::$connection)) {
+            self::$connection = DatabaseConnection::connect();
+        }
+    }
 
     /**
      * Add the value set in the child class a key value pair to the $data array
@@ -81,10 +88,7 @@ class PotatoModel extends DatabaseConnection
      */
     final public static function getAll()
     {
-
         try {
-
-            self::$connection = DatabaseConnection::connect();
 
             $getAll = self::$connection->prepare("SELECT * FROM " . self::getTableName());
 
@@ -114,8 +118,6 @@ class PotatoModel extends DatabaseConnection
      */
     public function save()
     {
-        self::$connection = DatabaseConnection::connect();
-
         if (self::$update === false) {
 
             $sqlQuery = "INSERT INTO " . self::getTableName();
@@ -142,8 +144,6 @@ class PotatoModel extends DatabaseConnection
 
     public static function find($id)
     {
-        self::$connection = DatabaseConnection::connect();
-
         $sqlQuery = "SELECT * FROM " . self::getTableName();
         $sqlQuery .= " WHERE " . self::getUniqueId(). " = ". $id;
 
@@ -179,8 +179,6 @@ class PotatoModel extends DatabaseConnection
      */
     public static function destroy($id)
     {
-        self::$connection = DatabaseConnection::connect();
-
         $sqlQuery = "DELETE FROM " . self::getTableName();
         $sqlQuery .= " WHERE " . self::getUniqueId() . " = " . $id;
 
