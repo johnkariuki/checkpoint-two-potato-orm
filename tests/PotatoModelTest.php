@@ -9,8 +9,19 @@ use Potato\Tests\Car;
 
 class PotatoModelTest extends PHPUnit_Framework_TestCase
 {
+    /**
+     * Contains a PDO Connection Object returned by the
+     * Database Connection class
+     *
+     * @var object
+     */
     protected static $connection;
 
+    /**
+     * setUpBeforeClass
+     *
+     * Run Fixture to prepare the test cars table
+     */
     public static function setUpBeforeClass()
     {
         self::$connection = DatabaseConnection::connect();
@@ -154,8 +165,6 @@ class PotatoModelTest extends PHPUnit_Framework_TestCase
         $deleteCar = Car::destroy(5);
         $cars = Car::getAll();
 
-        print_r($cars);
-
         $this->assertTrue($deleteCar);
         $this->assertEquals(4, count($cars));
 
@@ -163,6 +172,13 @@ class PotatoModelTest extends PHPUnit_Framework_TestCase
         $this->AssertNotContains("Beetle", $cars);
     }
 
+    /**
+     * tearDownAfterClass
+     *
+     * DROP teat table cars
+     *
+     * @return void
+     */
     public static function tearDownAfterClass()
     {
         self::$connection->exec("DROP TABLE IF EXISTS cars");
