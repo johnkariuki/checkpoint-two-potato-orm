@@ -106,6 +106,12 @@ class PotatoModelTest extends PHPUnit_Framework_TestCase
      *
      * Assert that the returned affected rows is equal to one
      *
+     * Assert that the last updated name field is Beetle
+     *
+     * Aseert that the last updated model is Mulsanne Range
+     *
+     * Assert that the last updated year is 2015
+     *
      * @return void
      */
     public function testFindAndUpdateRecord()
@@ -114,8 +120,14 @@ class PotatoModelTest extends PHPUnit_Framework_TestCase
         $car->name = "Beetle";
         $affectedRows = $car->save();
 
+        $cars = Car::getAll();
+
         $this->assertTrue($car instanceof PotatoModel);
         $this->assertEquals(1, $affectedRows);
+
+        $this->assertEquals("Beetle", $cars[4]["name"]);
+        $this->assertEquals("Mulsanne Range", $cars[4]["model"]);
+        $this->assertEquals(2015, $cars[4]["year"]);
     }
 
     /**
@@ -126,8 +138,6 @@ class PotatoModelTest extends PHPUnit_Framework_TestCase
      * Assert that returned row contains 5 rows
      *
      * Assert that each returned row contains all the table colummns
-     *
-     * Assert that the last updated name field is Beetle
      *
      * @return void
      */
@@ -141,10 +151,6 @@ class PotatoModelTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey("name", $cars[4]);
         $this->assertArrayHasKey("model", $cars[4]);
         $this->assertArrayHasKey("year", $cars[4]);
-
-        $this->assertEquals("Beetle", $cars[4]["name"]);
-        $this->assertEquals("Mulsanne Range", $cars[4]["model"]);
-        $this->assertEquals(2015, $cars[4]["year"]);
     }
 
     /**
