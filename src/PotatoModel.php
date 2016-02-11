@@ -84,25 +84,34 @@ class PotatoModel extends DatabaseConnection
      * public function that saves a new instance of the child class data into the database
      *
      * Create PDO connection, construct SQL Statement, execute the statement
-     * and return the number of inserted/saved/affected rows
+     * and return the primary key value of inserted row
      *
-     * @return integer return the number of inserted/saved/affected rows
+     * @return integer return the primary key value of inserted row
      */
     public function save()
     {
         self::$connection = DatabaseConnection::connect();
 
-        $sql = "INSERT INTO " . self::getTableName();
-        $sql .= " (" . implode(", ", array_keys(self::$data)). ")";
-        $sql .= " VALUES (" . self::getDataFieldValues(self::$data) . ") ";
+        $sqlQuery = "INSERT INTO " . self::getTableName();
+        $sqlQuery .= " (" . implode(", ", array_keys(self::$data)). ")";
+        $sqlQuery .= " VALUES (" . self::getDataFieldValues(self::$data) . ") ";
 
         try {
 
-            return self::$connection->exec($sql);
+            self::$connection->exec($sqlQuery);
+            return self::$connection->lastInsertId();
 
         } catch (PDOException $e) {
             return $e->getMessage();
         }
+    }
+
+    public static function destroy($id)
+    {
+        self::$connection = DatabaseConnection::connect();
+
+        self::$connection->prepare("SELECT * FROM " . self::getTableName() . " ");
+
     }
 
     /**
