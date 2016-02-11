@@ -4,6 +4,8 @@ namespace Potato\Tests;
 
 use PHPUnit_Framework_TestCase;
 use Potato\Database\DatabaseConnection;
+use Potato\Manager\PotatoModel;
+use Potato\Tests\Car;
 
 class PotatoModelTest extends PHPUnit_Framework_TestCase
 {
@@ -28,9 +30,9 @@ class PotatoModelTest extends PHPUnit_Framework_TestCase
     /**
      * seedDatabase
      *
-     * Seed 3 rows of data into the cars table
+     * Seed 4 rows of data into the cars table
      *
-     * @return [type] [description]
+     * @return
      */
     public static function seedDatabase()
     {
@@ -59,6 +61,31 @@ class PotatoModelTest extends PHPUnit_Framework_TestCase
         $model = 'GTC4 Lusso';
         $year = 2016;
         $statement->execute();
+    }
+
+    /**
+     * testAddNewRecord
+     *
+     * Assert that the instantiated class is an instance of the Potato Model
+     *
+     * Assert that the save method adds a new [5th] record into the cars table
+     *
+     * For a new insert, the save method returns the ID of the inserted record
+     *
+     * @return void
+     */
+    public function testAddNewRecord()
+    {
+        $car = new Car();
+
+        $car->name = "Bentley";
+        $car->model = "Mulsanne Range";
+        $car->year = 2015;
+
+        $carId = $car->save();
+
+        $this->assertTrue($car instanceof PotatoModel);
+        $this->assertEquals(5, $carId);
     }
 
     public static function tearDownAfterClass()
