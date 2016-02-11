@@ -97,7 +97,7 @@ class PotatoModelTest extends PHPUnit_Framework_TestCase
      *
      * @return void
      */
-    public function testFindRecord()
+    public function testFindAndUpdateRecord()
     {
         $car = Car::find(5);
         $car->name = "Beetle";
