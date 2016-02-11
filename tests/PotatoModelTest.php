@@ -136,6 +136,33 @@ class PotatoModelTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(2015, $cars[4]["year"]);
     }
 
+    /**
+     * testDestroyRecord
+     *
+     * Delete last car inserted.
+     *
+     * Assert that delete method returns true
+     *
+     * assert that returned getAll array has 4 cars
+     *
+     * Assert that car with id of 5 is not in cars table
+     *
+     * @return [type] [description]
+     */
+    public function testDestroyRecord()
+    {
+        $deleteCar = Car::destroy(5);
+        $cars = Car::getAll();
+
+        print_r($cars);
+
+        $this->assertTrue($deleteCar);
+        $this->assertEquals(4, count($cars));
+
+        $this->AssertNotContains(5, $cars);
+        $this->AssertNotContains("Beetle", $cars);
+    }
+
     public static function tearDownAfterClass()
     {
         self::$connection->exec("DROP TABLE IF EXISTS cars");
