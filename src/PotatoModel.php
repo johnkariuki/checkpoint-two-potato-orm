@@ -101,8 +101,6 @@ class PotatoModel extends DatabaseConnection
 
                 $result = $getAll->fetchAll(PDO::FETCH_ASSOC);
 
-                self::$connection  = DatabaseConnection::close();
-
                 return $result;
             }
         } catch (PDOException $e) {
