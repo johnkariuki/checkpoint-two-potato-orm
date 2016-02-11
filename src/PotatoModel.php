@@ -16,10 +16,25 @@ use PDOException;
 class PotatoModel extends DatabaseConnection
 {
     /**
-     * Table name
+     * Table name from Child Class
+     *
      * @var string
      */
     protected static $table;
+
+    /**
+     * Unique ID value from Child Class
+     *
+     * @var [type]
+     */
+    protected static $uniqueId;
+
+     /**
+     * Contains unique ID value
+     *
+     * @var null
+     */
+    protected static $uniqueIdValue = null;
 
     /**
      * Contains a PDO Connection Object returned by the
@@ -36,6 +51,15 @@ class PotatoModel extends DatabaseConnection
      * @var array
      */
     protected static $data = [];
+
+    /**
+     * If set to true, the save method performs an update on existing row
+     *
+     * If set to false, the save method inserts a new row
+     *
+     * @var boolean
+     */
+    protected static $update = false;
 
     /**
      * Add the value set in the child class a key value pair to the $data array
@@ -92,25 +116,82 @@ class PotatoModel extends DatabaseConnection
     {
         self::$connection = DatabaseConnection::connect();
 
-        $sqlQuery = "INSERT INTO " . self::getTableName();
-        $sqlQuery .= " (" . implode(", ", array_keys(self::$data)). ")";
-        $sqlQuery .= " VALUES (" . self::getDataFieldValues(self::$data) . ") ";
+        if (self::$update === false) {
+
+            $sqlQuery = "INSERT INTO " . self::getTableName();
+            $sqlQuery .= " (" . implode(", ", array_keys(self::$data)). ")";
+            $sqlQuery .= " VALUES (" . self::getDataFieldValues(self::$data) . ") ";
+        } else {
+            $sqlQuery = "UPDATE " . self::getTableName();
+            $sqlQuery .= " SET " . self::getUpdateFieldValues(self::$data);
+            $sqlQuery .= " WHERE " . self::getUniqueId() . " = " . self::$uniqueIdValue;
+        }
 
         try {
 
-            self::$connection->exec($sqlQuery);
-            return self::$connection->lastInsertId();
+            $query = self::$connection->exec($sqlQuery);
+            self::$data = [];
+
+            return self::$update ? $query : self::$connection->lastInsertId();
 
         } catch (PDOException $e) {
             return $e->getMessage();
         }
     }
 
+
+    public static function find($id)
+    {
+        self::$connection = DatabaseConnection::connect();
+
+        $sqlQuery = "SELECT * FROM " . self::getTableName();
+        $sqlQuery .= " WHERE " . self::getUniqueId(). " = ". $id;
+
+        try {
+            $preparedStatement = self::$connection->prepare($sqlQuery);
+            $preparedStatement->execute();
+
+            if ($row = $preparedStatement->fetch(PDO::FETCH_ASSOC)) {
+
+                self::$update = true;
+                self::$uniqueIdValue = $id;
+
+                return new static;
+            }
+
+            return false;
+
+        } catch (PDOException $e) {
+            return $e->getMessage();
+        }
+    }
+
+    /**
+     * destroy
+     *
+     * Takes an ID parameter, deletes from the table where the unique ID
+     * matches the ID parameter
+     *
+     * @param  integer $id a unique ID from the table
+     *
+     * @return boolean     should return true or false based on
+     *                     whether it was deleted or not
+     */
     public static function destroy($id)
     {
         self::$connection = DatabaseConnection::connect();
 
-        self::$connection->prepare("SELECT * FROM " . self::getTableName() . " ");
+        $sqlQuery = "DELETE FROM " . self::getTableName();
+        $sqlQuery .= " WHERE " . self::getUniqueId() . " = " . $id;
+
+        try {
+
+            return self::$connection->exec($sqlQuery) ? true : false;
+
+        } catch (PDOException $e) {
+
+            return $e->getMessage();
+        }
 
     }
 
@@ -135,7 +216,29 @@ class PotatoModel extends DatabaseConnection
     }
 
     /**
-     * [getDataFieldValues description]
+     * getUniqueId
+     *
+     * If the unique ID is set in the child class, return it
+     *
+     * else return a default unique ID of 'id'
+     *
+     * @return string Unique ID table ID
+     */
+    public static function getUniqueId()
+    {
+        if (! isset(static::$uniqueId)) {
+            return 'id';
+        }
+
+        return static::$uniqueId;
+    }
+
+    /**
+     * getDataFieldValues
+     *
+     * return an comma separated string of field value pairs
+     * in assoc array
+     *
      * @param  array    $fieldValueArray  An associative array of all the field-value pairs
      * @return string   $data             A string of comma separated values for SQL statement
      */
@@ -154,7 +257,32 @@ class PotatoModel extends DatabaseConnection
 
             } else {
 
-                $data .= $value . "";
+                $data .= $value;
+            }
+
+
+            $data .= ($key !== $lastKey) ? ", " : "";
+        }
+
+        return $data;
+    }
+
+    private function getUpdateFieldValues($fieldValueArray)
+    {
+        $data = null;
+
+        $arrayKeys = array_keys($fieldValueArray);
+        $lastKey = end($arrayKeys);
+
+        foreach (self::$data as $key => $value) {
+
+            if (is_string($value)) {
+
+                $data .= "$key = '{$value}'";
+
+            } else {
+
+                $data .= "{$key} = $value";
             }
 
 
