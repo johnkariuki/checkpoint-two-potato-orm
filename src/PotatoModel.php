@@ -156,7 +156,7 @@ class PotatoModel extends DatabaseConnection
             $preparedStatement = self::$connection->prepare($sqlQuery);
             $preparedStatement->execute();
 
-            if ($row = $preparedStatement->fetch(PDO::FETCH_ASSOC)) {
+            if ($preparedStatement->fetch(PDO::FETCH_ASSOC)) {
 
                 self::$update = true;
                 self::$uniqueIdValue = $fieldId;
