@@ -142,10 +142,10 @@ class PotatoModel extends DatabaseConnection
     }
 
 
-    public static function find($id)
+    public static function find($fieldId)
     {
         $sqlQuery = "SELECT * FROM " . self::getTableName();
-        $sqlQuery .= " WHERE " . self::getUniqueId(). " = ". $id;
+        $sqlQuery .= " WHERE " . self::getUniqueId(). " = ". $fieldId;
 
         try {
             $preparedStatement = self::$connection->prepare($sqlQuery);
@@ -154,7 +154,7 @@ class PotatoModel extends DatabaseConnection
             if ($row = $preparedStatement->fetch(PDO::FETCH_ASSOC)) {
 
                 self::$update = true;
-                self::$uniqueIdValue = $id;
+                self::$uniqueIdValue = $fieldId;
 
                 return new static;
             }
@@ -177,10 +177,10 @@ class PotatoModel extends DatabaseConnection
      * @return boolean     should return true or false based on
      *                     whether it was deleted or not
      */
-    public static function destroy($id)
+    public static function destroy($fieldId)
     {
         $sqlQuery = "DELETE FROM " . self::getTableName();
-        $sqlQuery .= " WHERE " . self::getUniqueId() . " = " . $id;
+        $sqlQuery .= " WHERE " . self::getUniqueId() . " = " . $fieldId;
 
         try {
 
@@ -249,15 +249,7 @@ class PotatoModel extends DatabaseConnection
 
         foreach (self::$data as $key => $value) {
 
-            if (is_string($value)) {
-
-                $data .= "'{$value}'";
-
-            } else {
-
-                $data .= $value;
-            }
-
+            $data .= is_string($value) ? "'{$value}'" : $value;
 
             $data .= ($key !== $lastKey) ? ", " : "";
         }
@@ -265,6 +257,14 @@ class PotatoModel extends DatabaseConnection
         return $data;
     }
 
+    /**
+     * getUpdateFieldValues
+     *
+     * returns comma sperarated string of field values in the SQL update format
+     *
+     * @param  array $fieldValueArray An associative array of all the field-value pairs
+     * @return string                 comma sperarated string of field values in the SQL update format
+     */
     private function getUpdateFieldValues($fieldValueArray)
     {
         $data = null;
@@ -274,16 +274,7 @@ class PotatoModel extends DatabaseConnection
 
         foreach (self::$data as $key => $value) {
 
-            if (is_string($value)) {
-
-                $data .= "$key = '{$value}'";
-
-            } else {
-
-                $data .= "{$key} = $value";
-            }
-
-
+            $data .= is_string($value) ? "$key = '{$value}'" : "{$key} = $value";
             $data .= ($key !== $lastKey) ? ", " : "";
         }
 
