@@ -88,6 +88,25 @@ class PotatoModelTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(5, $carId);
     }
 
+    /**
+     * testFindRecord
+     *
+     * Assert that $car is an instance of the PotatoModel
+     *
+     * Assert that the returned affected rows is equal to one
+     *
+     * @return void
+     */
+    public function testFindRecord()
+    {
+        $car = Car::find(5);
+        $car->name = "Beetle";
+        $affectedRows = $car->save();
+
+        $this->assertTrue($car instanceof PotatoModel);
+        $this->assertEquals(1, $affectedRows);
+    }
+
     public static function tearDownAfterClass()
     {
         self::$connection->exec("DROP TABLE IF EXISTS cars");
