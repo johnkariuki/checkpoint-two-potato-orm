@@ -105,7 +105,7 @@ class PotatoModel extends DatabaseConnection
             }
         } catch (PDOException $e) {
 
-            return  $e->getMessage();
+            throw new PDOException($e->getMessage());
         }
     }
 
@@ -140,7 +140,7 @@ class PotatoModel extends DatabaseConnection
             return self::$update ? $query : self::$connection->lastInsertId();
 
         } catch (PDOException $e) {
-            return $e->getMessage();
+            throw new PDOException($e->getMessage());
         }
     }
 
@@ -165,7 +165,7 @@ class PotatoModel extends DatabaseConnection
             return false;
 
         } catch (PDOException $e) {
-            return $e->getMessage();
+            throw new PDOException($e->getMessage());
         }
     }
 
@@ -191,7 +191,7 @@ class PotatoModel extends DatabaseConnection
 
         } catch (PDOException $e) {
 
-            return $e->getMessage();
+            throw new PDOException($e->getMessage());
         }
 
     }
