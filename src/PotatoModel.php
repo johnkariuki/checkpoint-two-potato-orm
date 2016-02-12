@@ -144,7 +144,15 @@ class PotatoModel extends DatabaseConnection
         }
     }
 
-
+    /**
+     * find
+     *
+     * Find takes a unique field ID and returns true if a row is found
+     * and false if a row is not found
+     *
+     * @param  integer $fieldId
+     * @return boolean    true if field returned, else false
+     */
     public static function find($fieldId)
     {
         $sqlQuery = "SELECT * FROM " . self::getTableName();
