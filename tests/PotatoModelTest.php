@@ -165,6 +165,7 @@ class PotatoModelTest extends PHPUnit_Framework_TestCase
     public function testFindRecordException()
     {
         $company  = Company::find(101);
+        $this->assertFalse($company);
     }
 
     /**
