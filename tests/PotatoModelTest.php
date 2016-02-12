@@ -7,6 +7,7 @@ use Potato\Database\DatabaseConnection;
 use Potato\Manager\PotatoModel;
 use Potato\Tests\Car;
 use Potato\Tests\Company;
+use Potato\Tests\User;
 
 class PotatoModelTest extends PHPUnit_Framework_TestCase
 {
@@ -250,6 +251,27 @@ class PotatoModelTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals("cars", Car::getTablename());
         $this->assertEquals("id", Car::getUniqueId());
+    }
+
+    /**
+     * testCustomHelperMethods
+     *
+     * Creates an instance of the Test User class
+     *
+     * The test user class contains static $table and $uniqueId
+     * fields thst overwrite the statick fields in PotatoModel
+     *
+     * Assert that the user table is as set (user_table)
+     *
+     * Assert that the unique ID is as set (user_id)
+     *
+     * @return void
+     */
+    public function testCustomHelperMethods()
+    {
+        $user = new User();
+        $this->assertEquals("user_table", User::getTablename());
+        $this->assertEquals("user_id", User::getUniqueId());
     }
 
     /**
