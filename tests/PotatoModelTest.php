@@ -178,6 +178,14 @@ class PotatoModelTest extends PHPUnit_Framework_TestCase
         $this->AssertNotContains("Beetle", $cars);
     }
 
+    public function testHelperMethods()
+    {
+        $cars = Car::getAll();
+
+        $this->assertEquals("cars", Car::getTablename());
+        $this->assertEquals("id", Car::getUniqueId());
+    }
+
     /**
      * tearDownAfterClass
      *
