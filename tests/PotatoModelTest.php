@@ -6,6 +6,7 @@ use PHPUnit_Framework_TestCase;
 use Potato\Database\DatabaseConnection;
 use Potato\Manager\PotatoModel;
 use Potato\Tests\Car;
+use Potato\Tests\Company;
 
 class PotatoModelTest extends PHPUnit_Framework_TestCase
 {
@@ -97,6 +98,19 @@ class PotatoModelTest extends PHPUnit_Framework_TestCase
 
         $this->assertTrue($car instanceof PotatoModel);
         $this->assertEquals(5, $carId);
+    }
+
+    /**
+     * testAddNewRecordException
+     *
+     * @expectedException PDOException
+     *
+     * @return void
+     */
+    public function testAddNewRecordException()
+    {
+        $company = Company::getAll();
+        print_r($company);
     }
 
     /**
