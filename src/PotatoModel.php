@@ -207,7 +207,8 @@ class PotatoModel extends DatabaseConnection
     /**
      * getTableName
      *
-     * If a table name is not set in the child class, return a 'snaked' table name.
+     * If a table name is not set in the child class,
+     * return a 'snaked' table name.
      *
      * else return the set table name
      *
