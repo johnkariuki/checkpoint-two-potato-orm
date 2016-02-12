@@ -103,14 +103,21 @@ class PotatoModelTest extends PHPUnit_Framework_TestCase
     /**
      * testAddNewRecordException
      *
+     * Exception is thrown when querying to or from a table that
+     * does not exist
+     *
      * @expectedException PDOException
      *
      * @return void
      */
     public function testAddNewRecordException()
     {
-        $company = Company::getAll();
-        print_r($company);
+        $company = new Company();
+        $company->name = "Bentley";
+        $company->model = "Mulsanne Range";
+        $company->year = 2015;
+
+        $companyId = $company->save();
     }
 
     /**
@@ -145,6 +152,21 @@ class PotatoModelTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * testFindRecordException
+     *
+     * Assert that exception is thrown when a table that
+     * does not exist is queried
+     *
+     * @expectedException PDOException
+     *
+     * @return void
+     */
+    public function testFindRecordException()
+    {
+        $company  = Company::find(101);
+    }
+
+    /**
      * testgetAllRecords
      *
      * Assert that getAll returns all rows in table
@@ -165,6 +187,21 @@ class PotatoModelTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey("name", $cars[4]);
         $this->assertArrayHasKey("model", $cars[4]);
         $this->assertArrayHasKey("year", $cars[4]);
+    }
+
+    /**
+     * testgetAllException
+     *
+     * Assert that returning all rows from a table that
+     * does not exist throws PDOException
+     *
+     * @expectedException PDOException
+     *
+     * @return void
+     */
+    public function testgetAllException()
+    {
+        $company = Company::getAll();
     }
 
     /**
@@ -190,6 +227,21 @@ class PotatoModelTest extends PHPUnit_Framework_TestCase
 
         $this->AssertNotContains(5, $cars);
         $this->AssertNotContains("Beetle", $cars);
+    }
+
+    /**
+     * testDestroyException
+     *
+     * Assert that delete from a non existent table
+     * throws PDOExceptions
+     *
+     * @expectedException PDOException
+     *
+     * @return void
+     */
+    public function testDestroyException()
+    {
+        $company = Company::destroy(1);
     }
 
     public function testHelperMethods()
