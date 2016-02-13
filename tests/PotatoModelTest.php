@@ -6,7 +6,7 @@ use PHPUnit_Framework_TestCase;
 use Potato\Database\DatabaseConnection;
 use Potato\Manager\PotatoModel;
 use Potato\Tests\Car;
-use Potato\Tests\Company;
+use Potato\Tests\Movies;
 use Potato\Tests\User;
 use PDO;
 
@@ -124,12 +124,10 @@ class PotatoModelTest extends PHPUnit_Framework_TestCase
      */
     public function testAddNewRecordException()
     {
-        $company = new Company();
-        $company->name = "Bentley";
-        $company->model = "Mulsanne Range";
-        $company->year = 2015;
+        $movie = new Movies();
+        $movie->name = "Deadpool";
 
-        $companyId = $company->save();
+        $movieId = $movie->save();
     }
 
     /**
@@ -175,8 +173,8 @@ class PotatoModelTest extends PHPUnit_Framework_TestCase
      */
     public function testFindRecordException()
     {
-        $company  = Company::find(101);
-        $this->assertFalse($company);
+        $movie  = Movies::find(101);
+        $this->assertFalse($movie);
     }
 
     /**
@@ -214,7 +212,7 @@ class PotatoModelTest extends PHPUnit_Framework_TestCase
      */
     public function testgetAllException()
     {
-        $company = Company::getAll();
+        $movie = Movies::getAll();
     }
 
     /**
@@ -254,7 +252,7 @@ class PotatoModelTest extends PHPUnit_Framework_TestCase
      */
     public function testDestroyException()
     {
-        $company = Company::destroy(1);
+        $movie = Movies::destroy(1);
     }
 
     public function testHelperMethods()

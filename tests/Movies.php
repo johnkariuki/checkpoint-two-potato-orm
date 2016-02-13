@@ -7,7 +7,7 @@ namespace Potato\Tests;
  */
 use Potato\Manager\PotatoModel;
 
-class Company extends PotatoModel
+class Movies extends PotatoModel
 {
     
 }
