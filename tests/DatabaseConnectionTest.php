@@ -25,7 +25,8 @@ class DatabaseConnectionTest extends PHPUnit_Framework_Testcase
         $this->assertTrue($connection instanceof PDO);
 
         $connection = DatabaseConnection::close();
-
         $this->assertNull($connection);
+
+        DatabaseConnection::connect();
     }
 }
