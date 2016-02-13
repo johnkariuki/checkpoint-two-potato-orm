@@ -9,60 +9,60 @@ use PDOException;
 
 /**
  * Class Potato Model: Base model that allows reading data from a
- * particular table
+ * particular table.
  *
  * Child classes can inherit CRUD methods from Potato Model
  */
 class PotatoModel extends DatabaseConnection
 {
     /**
-     * Table name from Child Class
+     * Table name from Child Class.
      *
      * @var string
      */
     protected static $table;
 
     /**
-     * Unique ID field from Child Class
+     * Unique ID Name field from Child Class.
      *
-     * @var [type]
+     * @var string
      */
     protected static $uniqueId;
 
-     /**
-     * Contains the unique ID value
+    /**
+     * Contains the unique ID value.
      *
-     * @var null
+     * @var int
      */
     protected static $uniqueIdValue = null;
 
     /**
      * Contains a PDO Connection Object returned by the
-     * Database Connection class
+     * Database Connection class.
      *
-     * @var Object
+     * @var object
      */
     protected static $connection = null;
 
     /**
      * Associative array that contains the name of each field and value
-     * as a key value pair
+     * as a key value pair.
      *
      * @var array
      */
     protected static $data = [];
 
     /**
-     * If set to true, the save method performs an update on existing row
+     * If set to true, the save method performs an update on existing row.
      *
      * If set to false, the save method inserts a new row
      *
-     * @var boolean
+     * @var bool
      */
     protected static $update = false;
 
     /**
-     * Create database connection
+     * Create database connection.
      *
      * Get all things up and running
      */
@@ -74,10 +74,10 @@ class PotatoModel extends DatabaseConnection
     }
 
     /**
-     * Add the value set in the child class a key value pair to the $data array
+     * Add the value set in the child class a key value pair to the $data array.
      *
-     * @param string      $key       Contains the name of the field e.g firstName
-     * @param string/int  $value     Contains the value of the field e.g John
+     * @param string         $key   Contains the name of the field e.g firstName
+     * @param string/integer $value Contains the value of the field e.g John
      */
     public function __set($key, $value)
     {
@@ -85,7 +85,7 @@ class PotatoModel extends DatabaseConnection
     }
 
     /**
-     * getAll
+     * getAll.
      *
      * Returns all rows from a table
      *
@@ -94,114 +94,110 @@ class PotatoModel extends DatabaseConnection
     final public static function getAll()
     {
         try {
-
-            $getAll = self::$connection->prepare("SELECT * FROM " . self::getTableName());
+            $getAll = self::$connection->prepare('SELECT * FROM '.self::getTableName());
 
             if ($getAll->execute()) {
-
                 $result = $getAll->fetchAll(PDO::FETCH_ASSOC);
-
-                self::$connection  = DatabaseConnection::close();
 
                 return $result;
             }
         } catch (PDOException $e) {
-
-            return  $e->getMessage();
+            throw new PDOException($e->getMessage());
         }
     }
 
     /**
-     * save
+     * save.
      *
      * public function that saves a new instance of the child class data into the database
      *
      * Create PDO connection, construct SQL Statement, execute the statement
      * and return the primary key value of inserted row
      *
-     * @return integer return the primary key value of inserted row
+     * @return int return the primary key value of inserted row
      */
     public function save()
     {
         if (self::$update === false) {
-
-            $sqlQuery = "INSERT INTO " . self::getTableName();
-            $sqlQuery .= " (" . implode(", ", array_keys(self::$data)). ")";
-            $sqlQuery .= " VALUES (" . self::getDataFieldValues(self::$data) . ") ";
+            $sqlQuery = 'INSERT INTO '.self::getTableName();
+            $sqlQuery .= ' ('.implode(', ', array_keys(self::$data)).')';
+            $sqlQuery .= ' VALUES ('.self::getDataFieldValues(self::$data).') ';
         } else {
-            $sqlQuery = "UPDATE " . self::getTableName();
-            $sqlQuery .= " SET " . self::getUpdateFieldValues(self::$data);
-            $sqlQuery .= " WHERE " . self::getUniqueId() . " = " . self::$uniqueIdValue;
+            $sqlQuery = 'UPDATE '.self::getTableName();
+            $sqlQuery .= ' SET '.self::getUpdateFieldValues(self::$data);
+            $sqlQuery .= ' WHERE '.self::getUniqueId().' = '.self::$uniqueIdValue;
         }
 
         try {
-
             $query = self::$connection->exec($sqlQuery);
             self::$data = [];
 
             return self::$update ? $query : self::$connection->lastInsertId();
-
         } catch (PDOException $e) {
-            return $e->getMessage();
+            throw new PDOException($e->getMessage());
         }
     }
 
-
+    /**
+     * find.
+     *
+     * Find takes a unique field ID and returns true if a row is found
+     * and false if a row is not found
+     *
+     * @param int $fieldId
+     *
+     * @return bool true if field returned, else false
+     */
     public static function find($fieldId)
     {
-        $sqlQuery = "SELECT * FROM " . self::getTableName();
-        $sqlQuery .= " WHERE " . self::getUniqueId(). " = ". $fieldId;
+        $sqlQuery = 'SELECT * FROM '.self::getTableName();
+        $sqlQuery .= ' WHERE '.self::getUniqueId().' = '.$fieldId;
 
         try {
             $preparedStatement = self::$connection->prepare($sqlQuery);
             $preparedStatement->execute();
 
             if ($preparedStatement->fetch(PDO::FETCH_ASSOC)) {
-
                 self::$update = true;
                 self::$uniqueIdValue = $fieldId;
 
-                return new static;
+                return new static();
             }
 
             return false;
-
         } catch (PDOException $e) {
-            return $e->getMessage();
+            throw new PDOException($e->getMessage());
         }
     }
 
     /**
-     * destroy
+     * destroy.
      *
      * Takes an ID parameter, deletes from the table where the unique ID
      * matches the ID parameter
      *
-     * @param  integer $id  a unique ID from the table
+     * @param int $id a unique ID from the table
      *
-     * @return boolean      should return true or false based on
-     *                     whether it was deleted or not
+     * @return bool should return true or false based on
+     *              whether it was deleted or not
      */
     public static function destroy($fieldId)
     {
-        $sqlQuery = "DELETE FROM " . self::getTableName();
-        $sqlQuery .= " WHERE " . self::getUniqueId() . " = " . $fieldId;
+        $sqlQuery = 'DELETE FROM '.self::getTableName();
+        $sqlQuery .= ' WHERE '.self::getUniqueId().' = '.$fieldId;
 
         try {
-
             return self::$connection->exec($sqlQuery) ? true : false;
-
         } catch (PDOException $e) {
-
-            return $e->getMessage();
+            throw new PDOException($e->getMessage());
         }
-
     }
 
     /**
-     * getTableName
+     * getTableName.
      *
-     * If a table name is not set in the child class, return a 'snaked' table name.
+     * If a table name is not set in the child class,
+     * return a 'snaked' table name.
      *
      * else return the set table name
      *
@@ -210,16 +206,16 @@ class PotatoModel extends DatabaseConnection
     public static function getTableName()
     {
         if (! isset(static::$table)) {
+            $className = new ReflectionClass(new static());
 
-            $className = new ReflectionClass(new static);
-            return strtolower($className->getShortName() . 's');
+            return strtolower($className->getShortName().'s');
         }
 
         return static::$table;
     }
 
     /**
-     * getUniqueId
+     * getUniqueId.
      *
      * If the unique ID is set in the child class, return it
      *
@@ -237,13 +233,14 @@ class PotatoModel extends DatabaseConnection
     }
 
     /**
-     * getDataFieldValues
+     * getDataFieldValues.
      *
      * return an comma separated string of field value pairs
      * in assoc array
      *
-     * @param  array    $fieldValueArray  An associative array of all the field-value pairs
-     * @return string   $data             A string of comma separated values for SQL statement
+     * @param array $fieldValueArray An associative array of all the field-value pairs
+     *
+     * @return string $data             A string of comma separated values for SQL statement
      */
     private function getDataFieldValues($fieldValueArray)
     {
@@ -253,22 +250,22 @@ class PotatoModel extends DatabaseConnection
         $lastKey = end($arrayKeys);
 
         foreach (self::$data as $key => $value) {
-
             $data .= is_string($value) ? "'{$value}'" : $value;
 
-            $data .= ($key !== $lastKey) ? ", " : "";
+            $data .= ($key !== $lastKey) ? ', ' : '';
         }
 
         return $data;
     }
 
     /**
-     * getUpdateFieldValues
+     * getUpdateFieldValues.
      *
      * returns comma sperarated string of field values in the SQL update format
      *
-     * @param  array $fieldValueArray An associative array of all the field-value pairs
-     * @return string                 comma sperarated string of field values in the SQL update format
+     * @param array $fieldValueArray An associative array of all the field-value pairs
+     *
+     * @return string comma sperarated string of field values in the SQL update format
      */
     private function getUpdateFieldValues($fieldValueArray)
     {
@@ -278,9 +275,8 @@ class PotatoModel extends DatabaseConnection
         $lastKey = end($arrayKeys);
 
         foreach (self::$data as $key => $value) {
-
             $data .= is_string($value) ? "$key = '{$value}'" : "{$key} = $value";
-            $data .= ($key !== $lastKey) ? ", " : "";
+            $data .= ($key !== $lastKey) ? ', ' : '';
         }
 
         return $data;

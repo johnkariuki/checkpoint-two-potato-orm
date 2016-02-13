@@ -10,6 +10,7 @@ before_script:
   - composer install --prefer-source --no-interaction --dev
   - composer require satooshi/php-coveralls
   - mkdir -p build/logs
+  - cp .env.travis .env
 
  # Commands you want to run that will verify your build.
 script: phpunit
