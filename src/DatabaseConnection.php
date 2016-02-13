@@ -6,29 +6,28 @@ use PDO;
 use PDOException;
 
 /**
- * Class configures connection to the database
+ * Class configures connection to the database.
  *
  * Loads database details from .env, configures DSN details and returns a PDO connection
- *
  */
 class DatabaseConnection
 {
     /**
-     * Associative array of Database configuratioon settings
+     * Associative array of Database configuratioon settings.
      *
      * @var array
      */
     protected static $dbConfig = [];
 
     /**
-     * PDO connection
+     * PDO connection.
      *
      * @var object
      */
     protected static $connection;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * Load .env package by https://github.com/vlucas/phpdotenv
      *
@@ -36,94 +35,87 @@ class DatabaseConnection
      */
     public function __construct()
     {
-        $dotenv = new \Dotenv\Dotenv(__DIR__ . "/..");
+        $dotenv = new \Dotenv\Dotenv(__DIR__.'/..');
         $dotenv->load();
 
         self::$dbConfig = [
-            "driver" => getenv('DB_DRIVER'),
-            "username" => getenv('DB_USERNAME'),
-            "password" => getenv('DB_PASSWORD'),
-            "database" => getenv('DB_NAME'),
-            "host" => getenv('DB_HOST'),
-            "port" => getenv('DB_PORT')
+            'driver' => getenv('DB_DRIVER'),
+            'username' => getenv('DB_USERNAME'),
+            'password' => getenv('DB_PASSWORD'),
+            'database' => getenv('DB_NAME'),
+            'host' => getenv('DB_HOST'),
+            'port' => getenv('DB_PORT'),
         ];
-
     }
 
     /**
      * Fetch database connection details
-     * and return a PDO connection or throw error
+     * and return a PDO connection or throw error.
      *
      * @return object PDO Object
      */
     public static function connect()
     {
-        new static;
+        new static();
         self::configDsn();
 
         try {
-
-            if (self::$dbConfig["driver"] === "sqlite") {
+            if (self::$dbConfig['driver'] === 'sqlite') {
                 self::$connection = new PDO(
-                    self::$dbConfig["dsn"]
+                    self::$dbConfig['dsn']
                 );
             } else {
-
                 self::$connection = new PDO(
-                    self::$dbConfig["dsn"],
-                    self::$dbConfig["username"],
-                    self::$dbConfig["password"]
+                    self::$dbConfig['dsn'],
+                    self::$dbConfig['username'],
+                    self::$dbConfig['password']
                 );
-
             }
 
             self::$connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
         } catch (PDOException $e) {
-
-            echo $e->getMessage();
+            throw new PDOException($e->getMessage());
         }
 
         return self::$connection;
     }
 
     /**
-     * Terminate database connection
-     *
-     * @return null close PDO DATABASE connection
+     * Terminate database connection.
      */
     public static function close()
     {
         self::$connection = null;
-        return null;
+
+        return;
     }
 
     /**
-     * construct PDO dsn string
-     *
-     * @return void
+     * construct PDO dsn string.
+     * 
+     * @codeCoverageIgnore
      */
     public static function configDsn()
     {
-        switch (self::$dbConfig["driver"]) {
+        switch (self::$dbConfig['driver']) {
 
-            case "mysql":
-                $dsn = "mysql:host=" . self::$dbConfig['host'];
-                $dsn .= ";dbname=" . self::$dbConfig['database'];
+            case 'mysql':
+                $dsn = 'mysql:host='.self::$dbConfig['host'];
+                $dsn .= ';dbname='.self::$dbConfig['database'];
                 break;
 
-            case "pgsql":
-                $dsn = "pgsql:host=" . self::$dbConfig['host'];
-                $dsn .= ";port=". self::$dbConfig['port'] .";dbname=" . self::$dbConfig['database'];
+            case 'pgsql':
+                $dsn = 'pgsql:host='.self::$dbConfig['host'];
+                $dsn .= ';port='.self::$dbConfig['port'].';dbname='.self::$dbConfig['database'];
                 break;
-            case "sqlite":
-                $dsn = "sqlite:" . self::$dbConfig["database"];
+            case 'sqlite':
+                $dsn = 'sqlite:'.self::$dbConfig['database'];
                 break;
             default:
-                $dsn = "sqlite:" . self::$dbConfig["database"];
+                $dsn = 'sqlite:'.self::$dbConfig['database'];
                 break;
         }
 
-        self::$dbConfig["dsn"] = $dsn;
+        self::$dbConfig['dsn'] = $dsn;
     }
 }
