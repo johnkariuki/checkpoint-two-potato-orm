@@ -100,7 +100,9 @@ class DatabaseConnection
 
     /**
      * construct PDO dsn string
-     *
+     * 
+     * @codeCoverageIgnore
+     * 
      * @return void
      */
     public static function configDsn()
