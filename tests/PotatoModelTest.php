@@ -8,6 +8,7 @@ use Potato\Manager\PotatoModel;
 use Potato\Tests\Car;
 use Potato\Tests\Company;
 use Potato\Tests\User;
+use PDO;
 
 class PotatoModelTest extends PHPUnit_Framework_TestCase
 {
@@ -74,6 +75,16 @@ class PotatoModelTest extends PHPUnit_Framework_TestCase
         $model = 'GTC4 Lusso';
         $year = 2016;
         $statement->execute();
+    }
+
+    public function testDBConnection()
+    {
+
+        $this->assertTrue(is_object(self::$connection));
+        $this->assertTrue(self::$connection instanceof PDO);
+
+        $connection = DatabaseConnection::close();
+        $this->assertNull($connection);
     }
 
     /**
