@@ -11,9 +11,9 @@ class DatabaseConnectionTest extends PHPUnit_Framework_Testcase
     /**
      * testDatabaseConnection
      *
-     * Test connect method creates a database connection
+     * Test connect method creates a PDO database connection
      *
-     * Test close method closes a datanase connection
+     * Test close method closes a database connection
      *
      * @return void
      */
