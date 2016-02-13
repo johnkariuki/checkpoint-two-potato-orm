@@ -5,23 +5,20 @@ namespace Potato\Tests;
 use PHPUnit_Framework_TestCase;
 use Potato\Database\DatabaseConnection;
 use Potato\Manager\PotatoModel;
-use Potato\Tests\Car;
-use Potato\Tests\Movies;
-use Potato\Tests\User;
 use PDO;
 
 class PotatoModelTest extends PHPUnit_Framework_TestCase
 {
     /**
      * Contains a PDO Connection Object returned by the
-     * Database Connection class
+     * Database Connection class.
      *
      * @var object
      */
     protected static $connection;
 
     /**
-     * setUpBeforeClass
+     * setUpBeforeClass.
      *
      * Run Fixture to prepare the test cars table
      */
@@ -42,7 +39,7 @@ class PotatoModelTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * seedDatabase
+     * seedDatabase.
      *
      * Seed 4 rows of data into the cars table
      *
@@ -79,7 +76,6 @@ class PotatoModelTest extends PHPUnit_Framework_TestCase
 
     public function testDBConnection()
     {
-
         $this->assertTrue(is_object(self::$connection));
         $this->assertTrue(self::$connection instanceof PDO);
 
@@ -88,22 +84,20 @@ class PotatoModelTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testAddNewRecord
+     * testAddNewRecord.
      *
      * Assert that the instantiated class is an instance of the Potato Model
      *
      * Assert that the save method adds a new [5th] record into the cars table
      *
      * For a new insert, the save method returns the ID of the inserted record
-     *
-     * @return void
      */
     public function testAddNewRecord()
     {
         $car = new Car();
 
-        $car->name = "Bentley";
-        $car->model = "Mulsanne Range";
+        $car->name = 'Bentley';
+        $car->model = 'Mulsanne Range';
         $car->year = 2015;
 
         $carId = $car->save();
@@ -113,25 +107,23 @@ class PotatoModelTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testAddNewRecordException
+     * testAddNewRecordException.
      *
      * Exception is thrown when querying to or from a table that
      * does not exist
      *
      * @expectedException PDOException
-     *
-     * @return void
      */
     public function testAddNewRecordException()
     {
         $movie = new Movies();
-        $movie->name = "Deadpool";
+        $movie->name = 'Deadpool';
 
         $movieId = $movie->save();
     }
 
     /**
-     * testFindRecord
+     * testFindRecord.
      *
      * Assert that $car is an instance of the PotatoModel
      *
@@ -142,13 +134,11 @@ class PotatoModelTest extends PHPUnit_Framework_TestCase
      * Aseert that the last updated model is Mulsanne Range
      *
      * Assert that the last updated year is 2015
-     *
-     * @return void
      */
     public function testFindAndUpdateRecord()
     {
         $car = Car::find(5);
-        $car->name = "Beetle";
+        $car->name = 'Beetle';
         $affectedRows = $car->save();
 
         $cars = Car::getAll();
@@ -156,37 +146,33 @@ class PotatoModelTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($car instanceof PotatoModel);
         $this->assertEquals(1, $affectedRows);
 
-        $this->assertEquals("Beetle", $cars[4]["name"]);
-        $this->assertEquals("Mulsanne Range", $cars[4]["model"]);
-        $this->assertEquals(2015, $cars[4]["year"]);
+        $this->assertEquals('Beetle', $cars[4]['name']);
+        $this->assertEquals('Mulsanne Range', $cars[4]['model']);
+        $this->assertEquals(2015, $cars[4]['year']);
     }
 
     /**
-     * testFindRecordException
+     * testFindRecordException.
      *
      * Assert that exception is thrown when a table that
      * does not exist is queried
      *
      * @expectedException PDOException
-     *
-     * @return void
      */
     public function testFindRecordException()
     {
-        $movie  = Movies::find(101);
+        $movie = Movies::find(101);
         $this->assertFalse($movie);
     }
 
     /**
-     * testgetAllRecords
+     * testgetAllRecords.
      *
      * Assert that getAll returns all rows in table
      *
      * Assert that returned row contains 5 rows
      *
      * Assert that each returned row contains all the table colummns
-     *
-     * @return void
      */
     public function testgetAllRecords()
     {
@@ -195,20 +181,18 @@ class PotatoModelTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(is_array($cars));
         $this->assertEquals(5, count($cars));
 
-        $this->assertArrayHasKey("name", $cars[4]);
-        $this->assertArrayHasKey("model", $cars[4]);
-        $this->assertArrayHasKey("year", $cars[4]);
+        $this->assertArrayHasKey('name', $cars[4]);
+        $this->assertArrayHasKey('model', $cars[4]);
+        $this->assertArrayHasKey('year', $cars[4]);
     }
 
     /**
-     * testgetAllException
+     * testgetAllException.
      *
      * Assert that returning all rows from a table that
      * does not exist throws PDOException
      *
      * @expectedException PDOException
-     *
-     * @return void
      */
     public function testgetAllException()
     {
@@ -216,7 +200,7 @@ class PotatoModelTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testDestroyRecord
+     * testDestroyRecord.
      *
      * Delete last car inserted.
      *
@@ -237,18 +221,16 @@ class PotatoModelTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(4, count($cars));
 
         $this->AssertNotContains(5, $cars);
-        $this->AssertNotContains("Beetle", $cars);
+        $this->AssertNotContains('Beetle', $cars);
     }
 
     /**
-     * testDestroyException
+     * testDestroyException.
      *
      * Assert that delete from a non existent table
      * throws PDOExceptions
      *
      * @expectedException PDOException
-     *
-     * @return void
      */
     public function testDestroyException()
     {
@@ -259,12 +241,12 @@ class PotatoModelTest extends PHPUnit_Framework_TestCase
     {
         $cars = Car::getAll();
 
-        $this->assertEquals("cars", Car::getTablename());
-        $this->assertEquals("id", Car::getUniqueId());
+        $this->assertEquals('cars', Car::getTablename());
+        $this->assertEquals('id', Car::getUniqueId());
     }
 
     /**
-     * testCustomHelperMethods
+     * testCustomHelperMethods.
      *
      * Creates an instance of the Test User class
      *
@@ -274,25 +256,21 @@ class PotatoModelTest extends PHPUnit_Framework_TestCase
      * Assert that the user table is as set (user_table)
      *
      * Assert that the unique ID is as set (user_id)
-     *
-     * @return void
      */
     public function testCustomHelperMethods()
     {
         $user = new User();
-        $this->assertEquals("user_table", User::getTablename());
-        $this->assertEquals("user_id", User::getUniqueId());
+        $this->assertEquals('user_table', User::getTablename());
+        $this->assertEquals('user_id', User::getUniqueId());
     }
 
     /**
-     * tearDownAfterClass
+     * tearDownAfterClass.
      *
      * DROP teat table cars
-     *
-     * @return void
      */
     public static function tearDownAfterClass()
     {
-        self::$connection->exec("DROP TABLE IF EXISTS cars");
+        self::$connection->exec('DROP TABLE IF EXISTS cars');
     }
 }
