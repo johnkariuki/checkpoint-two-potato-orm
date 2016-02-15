@@ -8,7 +8,7 @@ A simple agnostic ORM that can perform the basic crud database operations.
 
 ##Install
 
-Via composer
+Via Github
 
 ``` bash
 $ git clone git@github.com:andela-jkariuki/checkpoint-two-potato-orm.git
@@ -35,6 +35,38 @@ DB_PORT = 8000
 
 ##Usage
 
+To use Potato ORM, extend the ```PotatoModel``` class. 
+
+The default naming convention for a table name associated with a class is it's lowercase plural syntax.
+
+The default naming convention for the unique table field is id.
+
+To overwrite the default naming conventions, declare protected variables as explained below.
+
+```php
+/**
+ * Default table name for Car class is cars.
+ *
+ * Default uniqueId field for table cars is id
+ */
+class Car extends PotatoModel
+{
+    //protected static $table = "your_table_name";
+    //protected static $uniqueId = "your_unique_id";
+}
+```
+Ensure the table exists before using the Potato ORM class to avoid exceptions.
+
+Use the SQL statement template below
+
+```php
+CREATE TABLE `cars` (
+	`id`	INTEGER PRIMARY KEY AUTOINCREMENT,
+	`name`	TEXT,
+	`model`	TEXT,
+	`year`	INTEGER
+)
+```
 ## Contributing
 
 Contributions are **welcome** and will be fully **credited**.
