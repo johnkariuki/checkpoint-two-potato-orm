@@ -11,13 +11,26 @@ A simple agnostic ORM that can perform the basic crud database operations.
 Via composer
 
 ``` bash
-$ composer require john-kariuki/potato-orm
+$ git clone git@github.com:andela-jkariuki/checkpoint-two-potato-orm.git
 ```
 
 Update packages
 
 ``` bash
 $ composer install
+```
+
+Rename .env.example to .env
+
+Update your .env to have your database credentials
+
+```bash
+DB_DRIVER = "sqlite"
+DB_USERNAME = "homestead"
+DB_PASSWORD = "secret"
+DB_NAME = "potato.db"
+DB_HOST = "localhost"
+DB_PORT = 8000
 ```
 
 ##Usage
