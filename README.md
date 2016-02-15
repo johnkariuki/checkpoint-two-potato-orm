@@ -1,5 +1,12 @@
 #Checkpoint Two: Potato ORM
 
+[![Build Status](https://travis-ci.org/andela-jkariuki/checkpoint-two-potato-orm.svg?branch=master)](https://travis-ci.org/andela-jkariuki/checkpoint-two-potato-orm)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/andela-jkariuki/checkpoint-two-potato-orm/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/andela-jkariuki/checkpoint-two-potato-orm/?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/andela-jkariuki/checkpoint-two-potato-orm/badge.svg?branch=develop)](https://coveralls.io/github/andela-jkariuki/checkpoint-two-potato-orm?branch=develop)
+[![Latest Version on Packagist][ico-version]][link-packagist]
+[![Total Downloads][ico-downloads]][link-downloads]
+[![Software License][ico-license]](https://github.com/andela-jkariuki/checkpoint-two-potato-orm)
+
 ##Andela Checkpoint Two
 
 A simple agnostic ORM that can perform the basic crud database operations.
@@ -209,3 +216,10 @@ Copyright (c) 2016 John kariuki <john.kariuki@andela.com>
 > LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 > OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 > THE SOFTWARE.
+
+[ico-version]: https://img.shields.io/packagist/v/john-kariuki/potato-orm.svg?style=flat-square
+[ico-downloads]: https://img.shields.io/packagist/dt/john-kariuki/potato-orm.svg?style=flat-square
+[ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
+
+[link-packagist]: https://packagist.org/packages/john-kariuki/potato-orm
+[link-downloads]: https://packagist.org/packages/john-kariuki/potato-orm
