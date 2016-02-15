@@ -67,6 +67,95 @@ CREATE TABLE `cars` (
 	`year`	INTEGER
 )
 ```
+
+Potato ORM gives you access to the following methods;
+
+Reading Data
+```php
+//Get all rows that from a table
+$cars = Car::getAll();
+```
+
+Inserting data
+```php
+//insert a new row to the table
+$car = new Car();
+$car->name = "Boss";
+$car->model = "Up";
+$car->year = 2013;
+
+echo $carId = $car->save();
+```
+
+Updating data
+```php
+//Update an existing row in the database
+$car = Car::find(1);
+$car->name = "Me Hennesy";
+$car->year = 2015;
+```
+Deleting data
+```php
+//delete an existing row in the table
+var_dump(Car::destroy(1));
+```
+###Sample Code
+
+Ensure to write your code inside a ```try catch``` block to catch any exceptions
+
+```php
+namespace DryRun;
+
+use Potato\Manager\PotatoModel;
+use PDOException;
+
+require 'vendor/autoload.php';
+
+class Car extends PotatoModel
+{
+    //protected static $table = "your_table_name";
+    //protected static $uniqueId = "your_unique_id";
+}
+try {
+
+    echo "Create a new Car\n";
+
+    $car = new Car();
+    $car->name = "Lambo";
+    $car->model = "Hura";
+    $car->year = 2013;
+
+    echo $carId = $car->save();
+
+    echo "\nCar has been created with an id of {$carId}\n\n";
+
+    echo  "Find the car that has just been created and updated the name and year\n";
+
+    $car = Car::find($carId);
+   
+    $car->name = "Huracan";
+    $car->year = 2015;
+
+
+    echo $car->save();
+
+    echo "\nOne row (of our new Car) has been updated.\n\n";
+
+    echo "Get all cars and print them out\n\n";
+    $cars = Car::getAll();
+    print_r($cars);
+
+    echo "\nAwesome.! Now let's delete the old car. Buy A new one if you can\n\n";
+
+    var_dump(Car::destroy($carId));
+    print_r(Car::getAll());
+
+    echo "\nYour old car is dead and gone\n";
+
+} catch (PDOException $e) {
+    echo $e->getMessage();
+}
+```
 ## Contributing
 
 Contributions are **welcome** and will be fully **credited**.
