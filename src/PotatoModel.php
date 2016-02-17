@@ -68,6 +68,16 @@ class PotatoModel extends DatabaseConnection
      */
     public function __construct()
     {
+        self::connect();
+    }
+
+    /**
+     * Create a PDO connection if one does not exist.
+     *
+     * @return void
+     */
+    public static function connect()
+    {
         if (is_null(self::$connection)) {
             self::$connection = DatabaseConnection::connect();
         }
@@ -93,6 +103,8 @@ class PotatoModel extends DatabaseConnection
      */
     final public static function getAll()
     {
+        self::connect();
+
         try {
             $getAll = self::$connection->prepare('SELECT * FROM '.self::getTableName());
 
@@ -118,6 +130,8 @@ class PotatoModel extends DatabaseConnection
      */
     public function save()
     {
+        self::connect();
+
         if (self::$update === false) {
             $sqlQuery = 'INSERT INTO '.self::getTableName();
             $sqlQuery .= ' ('.implode(', ', array_keys(self::$data)).')';
@@ -130,9 +144,15 @@ class PotatoModel extends DatabaseConnection
 
         try {
             $query = self::$connection->exec($sqlQuery);
-            self::$data = [];
 
-            return self::$update ? $query : self::$connection->lastInsertId();
+            if ($query) {
+
+                self::$data = [];
+                return self::$update ? $query : true;
+            }
+            
+            throw new PDOException("Error Processing Request: " . self::$update ? "Update" : "Save");
+            
         } catch (PDOException $e) {
             throw new PDOException($e->getMessage());
         }
@@ -150,6 +170,8 @@ class PotatoModel extends DatabaseConnection
      */
     public static function find($fieldId)
     {
+        self::connect();
+
         $sqlQuery = 'SELECT * FROM '.self::getTableName();
         $sqlQuery .= ' WHERE '.self::getUniqueId().' = '.$fieldId;
 
@@ -183,6 +205,8 @@ class PotatoModel extends DatabaseConnection
      */
     public static function destroy($fieldId)
     {
+        self::connect();
+
         $sqlQuery = 'DELETE FROM '.self::getTableName();
         $sqlQuery .= ' WHERE '.self::getUniqueId().' = '.$fieldId;
 
