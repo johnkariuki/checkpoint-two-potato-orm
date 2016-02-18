@@ -138,9 +138,9 @@ try {
     $car->year = 2013;
 
     if ( $car->save()) {
-	echo "\nCar has been created.\n\n";
+	   echo "\nCar has been created.\n\n";
     } else {
-	echo "There was an error saving your car.";
+	   echo "There was an error saving your car.";
     }
 
     echo  "Find the car that has just been created and updated the name and year\n";
