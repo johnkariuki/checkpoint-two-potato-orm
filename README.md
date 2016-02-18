@@ -138,10 +138,10 @@ try {
     $car->year = 2013;
 
     if ( $car->save()) {
-	echo "\nCar has been created with an id of {$carId}\n\n";
-} else {
+	echo "\nCar has been created.\n\n";
+    } else {
 	echo "There was an error saving your car.";
-}
+    }
 
     echo  "Find the car that has just been created and updated the name and year\n";
 
@@ -153,7 +153,7 @@ try {
 
     echo $car->save();
 
-    echo "\nOne row (of our new Car) has been updated.\n\n";
+    echo "\None row (of our new Car) has been updated.\n\n";
 
     echo "Get all cars and print them out\n\n";
     $cars = Car::getAll();
@@ -161,7 +161,7 @@ try {
 
     echo "\nAwesome.! Now let's delete the old car. Buy A new one if you can\n\n";
 
-    var_dump(Car::destroy($carId));
+    var_dump(Car::destroy(1));
     print_r(Car::getAll());
 
     echo "\nYour old car is dead and gone\n";
