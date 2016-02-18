@@ -137,13 +137,15 @@ try {
     $car->model = "Hura";
     $car->year = 2013;
 
-    echo $carId = $car->save();
-
-    echo "\nCar has been created with an id of {$carId}\n\n";
+    if ( $car->save()) {
+	echo "\nCar has been created with an id of {$carId}\n\n";
+} else {
+	echo "There was an error saving your car.";
+}
 
     echo  "Find the car that has just been created and updated the name and year\n";
 
-    $car = Car::find($carId);
+    $car = Car::find(1);
    
     $car->name = "Huracan";
     $car->year = 2015;
