@@ -96,7 +96,7 @@ $car->name = "Boss";
 $car->model = "Up";
 $car->year = 2013;
 
-echo $carId = $car->save();
+$car->save(); //returns a boolean value. true or false if saved or not respectively.
 ```
 
 Updating data
