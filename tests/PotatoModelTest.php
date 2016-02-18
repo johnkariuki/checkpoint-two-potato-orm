@@ -104,6 +104,7 @@ class PotatoModelTest extends PHPUnit_Framework_TestCase
 
         $this->assertTrue($car instanceof PotatoModel);
         $this->assertEquals(5, $carId);
+        $this->assertTrue($carId);
     }
 
     /**
