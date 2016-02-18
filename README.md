@@ -15,6 +15,11 @@ A simple agnostic ORM that can perform the basic crud database operations.
 
 ##Install
 
+Via Composer
+
+```bash
+$ composer require john-kariuki/potato-orm
+```
 Via Github
 
 ``` bash
