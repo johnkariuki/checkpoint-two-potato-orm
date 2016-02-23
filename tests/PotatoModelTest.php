@@ -167,6 +167,36 @@ class PotatoModelTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * testReturnRecord
+     *
+     * assert that findRecord returns an array of record
+     *
+     * @return void
+     */
+    public function testReturnRecord()
+    {
+        $car = Car::findRecord(1);
+        $this->assertTrue(is_array($car));
+        $this->assertArrayHasKey('name', $car);
+        $this->assertArrayHasKey('year', $car);
+        $this->assertArrayHasKey('model', $car);
+    }
+
+    /**
+     * testReturnRecordException.
+     *
+     * Assert that exception is thrown when a table that
+     * does not exist is queried
+     *
+     * @expectedException PDOException
+     */
+    public function testReturnRecordException()
+    {
+        $car = Car::findRecord(101);
+        $this->assertFalse($car);
+    }
+
+    /**
      * testgetAllRecords.
      *
      * Assert that getAll returns all rows in table
