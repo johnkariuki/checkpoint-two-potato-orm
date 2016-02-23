@@ -150,9 +150,9 @@ class PotatoModel extends DatabaseConnection
                 self::$data = [];
                 return self::$update ? $query : true;
             }
-            
+
             throw new PDOException("Error Processing Request: " . self::$update ? "Update" : "Save");
-            
+
         } catch (PDOException $e) {
             throw new PDOException($e->getMessage());
         }
@@ -184,6 +184,27 @@ class PotatoModel extends DatabaseConnection
                 self::$uniqueIdValue = $fieldId;
 
                 return new static();
+            }
+
+            throw new PDOException("No record found with that ID.");
+        } catch (PDOException $e) {
+            throw new PDOException($e->getMessage());
+        }
+    }
+
+    public static function findRecord($recordId)
+    {
+        self::connect();
+
+        $sqlQuery = 'SELECT * FROM '.self::getTableName();
+        $sqlQuery .= ' WHERE '.self::getUniqueId().' = '.$recordId;
+
+        try {
+            $preparedStatement = self::$connection->prepare($sqlQuery);
+            $preparedStatement->execute();
+
+            if ($record = $preparedStatement->fetch(PDO::FETCH_ASSOC)) {
+                return $record;
             }
 
             throw new PDOException("No record found with that ID.");
