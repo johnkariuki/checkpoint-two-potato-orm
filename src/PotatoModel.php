@@ -192,14 +192,23 @@ class PotatoModel extends DatabaseConnection
         }
     }
 
-    public static function findRecord($recordId)
+    public static function findRecord($searchField)
     {
         self::connect();
-
-        $sqlQuery = 'SELECT * FROM '.self::getTableName();
-        $sqlQuery .= ' WHERE '.self::getUniqueId().' = '.$recordId;
-
         try {
+            if (is_int($searchField)) {
+
+                $sqlQuery = 'SELECT * FROM '.self::getTableName();
+                $sqlQuery .= ' WHERE '.self::getUniqueId().' = '.$searchField;
+            } elseif (is_array($searchField)) {
+
+                $sqlQuery = 'SELECT * FROM '.self::getTableName();
+                $sqlQuery .= ' WHERE ('. self::getWhereClause($searchField) . ')';
+            } else {
+
+                throw new PDOException("Invalid search data provided");
+            }
+
             $preparedStatement = self::$connection->prepare($sqlQuery);
             $preparedStatement->execute();
 
@@ -209,6 +218,7 @@ class PotatoModel extends DatabaseConnection
 
             throw new PDOException("No record found with that ID.");
         } catch (PDOException $e) {
+
             throw new PDOException($e->getMessage());
         }
     }
@@ -322,6 +332,20 @@ class PotatoModel extends DatabaseConnection
         foreach (self::$data as $key => $value) {
             $data .= is_string($value) ? "$key = '{$value}'" : "{$key} = $value";
             $data .= ($key !== $lastKey) ? ', ' : '';
+        }
+
+        return $data;
+    }
+
+    public static function getWhereClause(array $arr)
+    {
+        $data = null;
+        $arrayKeys = array_keys($arr);
+        $lastKey = end($arrayKeys);
+
+        foreach ($arr as $key => $value) {
+            $data .= is_string($value) ? "$key = '{$value}'" : "{$key} = $value";
+            $data .= ($key !== $lastKey) ? ' AND ' : '';
         }
 
         return $data;
