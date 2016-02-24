@@ -180,10 +180,32 @@ class PotatoModelTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('name', $car);
         $this->assertArrayHasKey('year', $car);
         $this->assertArrayHasKey('model', $car);
+
+        $car2 = Car::findRecord([
+            'id' => 1,
+            'name' => 'Ford'
+        ]);
+        $this->assertTrue(is_array($car));
+        $this->assertArrayHasKey('name', $car);
+        $this->assertArrayHasKey('year', $car);
+        $this->assertArrayHasKey('model', $car);
     }
 
     /**
      * testReturnRecordException.
+     *
+     * Assert that exception is thrown
+     * 
+     * when invalid parameter is passed
+     *
+     * @expectedException PDOException
+     */
+    public function testReturnInvalidRecordException()
+    {
+        $car = Car::findRecord("strinf");
+    }
+
+    /** testReturnRecordException.
      *
      * Assert that exception is thrown when a table that
      * does not exist is queried
