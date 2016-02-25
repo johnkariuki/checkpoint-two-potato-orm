@@ -196,7 +196,7 @@ class PotatoModel extends DatabaseConnection
     {
         self::connect();
         try {
-            if (is_int($searchField)) {
+            if (is_int((int) $searchField)) {
 
                 $sqlQuery = 'SELECT * FROM '.self::getTableName();
                 $sqlQuery .= ' WHERE '.self::getUniqueId().' = '.$searchField;
