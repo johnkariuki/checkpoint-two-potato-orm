@@ -216,7 +216,7 @@ class PotatoModel extends DatabaseConnection
                 return $record;
             }
 
-            throw new PDOException("No record found with that ID.");
+            return false;
         } catch (PDOException $e) {
 
             throw new PDOException($e->getMessage());
