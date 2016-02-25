@@ -196,7 +196,7 @@ class PotatoModel extends DatabaseConnection
     {
         self::connect();
         try {
-            if (is_int((int) $searchField)) {
+            if (is_numeric($searchField)) {
 
                 $sqlQuery = 'SELECT * FROM '.self::getTableName();
                 $sqlQuery .= ' WHERE '.self::getUniqueId().' = '.$searchField;
@@ -216,7 +216,7 @@ class PotatoModel extends DatabaseConnection
                 return $record;
             }
 
-            throw new PDOException("No record found with that ID.");
+            return false;
         } catch (PDOException $e) {
 
             throw new PDOException($e->getMessage());

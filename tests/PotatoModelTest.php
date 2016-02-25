@@ -210,7 +210,7 @@ class PotatoModelTest extends PHPUnit_Framework_TestCase
      * Assert that exception is thrown when a table that
      * does not exist is queried
      *
-     * @expectedException PDOException
+     * 
      */
     public function testReturnRecordException()
     {
