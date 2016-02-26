@@ -189,13 +189,22 @@ class PotatoModelTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('name', $car);
         $this->assertArrayHasKey('year', $car);
         $this->assertArrayHasKey('model', $car);
+
+        $cars = Car::findRecords([
+            'id' => 1,
+            'name' => 'Ford'
+        ]);
+        $this->assertTrue(is_array($cars[0]));
+        $this->assertArrayHasKey('name', $cars[0]);
+        $this->assertArrayHasKey('year', $cars[0]);
+        $this->assertArrayHasKey('model', $cars[0]);
     }
 
     /**
      * testReturnRecordException.
      *
      * Assert that exception is thrown
-     * 
+     *
      * when invalid parameter is passed
      *
      * @expectedException PDOException
@@ -205,12 +214,26 @@ class PotatoModelTest extends PHPUnit_Framework_TestCase
         $car = Car::findRecord("strinf");
     }
 
+    /**
+     * testReturnRecordException.
+     *
+     * Assert that exception is thrown
+     *
+     * when invalid parameter is passed
+     *
+     * @expectedException PDOException
+     */
+    public function testReturnInvalidRecordExceptionForAll()
+    {
+        $car = Car::findRecords("strinf");
+    }
+
     /** testReturnRecordException.
      *
      * Assert that exception is thrown when a table that
      * does not exist is queried
      *
-     * 
+     *
      */
     public function testReturnRecordException()
     {
