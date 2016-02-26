@@ -35,7 +35,7 @@ class DatabaseConnection
      */
     public function __construct()
     {
-        $dotenv = new \Dotenv\Dotenv(__DIR__.'/..');
+        $dotenv = new \Dotenv\Dotenv(__DIR__.'/../../../..');
         $dotenv->load();
 
         self::$dbConfig = [
@@ -92,7 +92,7 @@ class DatabaseConnection
 
     /**
      * construct PDO dsn string.
-     * 
+     *
      * @codeCoverageIgnore
      */
     public static function configDsn()
