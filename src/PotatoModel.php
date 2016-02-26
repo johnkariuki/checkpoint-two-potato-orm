@@ -192,6 +192,13 @@ class PotatoModel extends DatabaseConnection
         }
     }
 
+    /**
+     * findRecord  Return all rows that meet a certain criteria.
+     *
+     * @param  int/array $searchField id field or array of search fields.
+     *
+     * @return array              Array of rows
+     */
     public static function findRecord($searchField)
     {
         self::connect();
@@ -222,6 +229,45 @@ class PotatoModel extends DatabaseConnection
             throw new PDOException($e->getMessage());
         }
     }
+
+    /**
+     * findRecords  Return all rows that meet a certain criteria.
+     *
+     * @param  int/array $searchField id field or array of search fields.
+     *
+     * @return array              Array of rows
+     */
+    public static function findRecords($searchField)
+    {
+        self::connect();
+        try {
+            if (is_numeric($searchField)) {
+
+                $sqlQuery = 'SELECT * FROM '.self::getTableName();
+                $sqlQuery .= ' WHERE '.self::getUniqueId().' = '.$searchField;
+            } elseif (is_array($searchField)) {
+
+                $sqlQuery = 'SELECT * FROM '.self::getTableName();
+                $sqlQuery .= ' WHERE ('. self::getWhereClause($searchField) . ')';
+            } else {
+
+                throw new PDOException("Invalid search data provided");
+            }
+
+            $preparedStatement = self::$connection->prepare($sqlQuery);
+            $preparedStatement->execute();
+
+            if ($record = $preparedStatement->fetchAll(PDO::FETCH_ASSOC)) {
+                return $record;
+            }
+
+            return false;
+        } catch (PDOException $e) {
+
+            throw new PDOException($e->getMessage());
+        }
+    }
+
 
     /**
      * destroy.
