@@ -38,7 +38,7 @@ class DatabaseConnection
         try {
             $dotenv = new \Dotenv\Dotenv(__DIR__.'/..');
             $dotenv->load();
-        } catch (Exception $e) {
+        } catch (InvalidPathException $e) {
             //proceed with server environement variables
         }
 
