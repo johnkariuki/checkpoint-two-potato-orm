@@ -4,6 +4,7 @@ namespace Potato\Database;
 
 use PDO;
 use PDOException;
+use Dotenv\Exception\InvalidPathException;
 
 /**
  * Class configures connection to the database.
