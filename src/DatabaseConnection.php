@@ -35,8 +35,13 @@ class DatabaseConnection
      */
     public function __construct()
     {
-        // $dotenv = new \Dotenv\Dotenv(__DIR__.'/../../../..');
-        // $dotenv->load();
+        try {
+            $dotenv = new \Dotenv\Dotenv(__DIR__.'/..');
+            $dotenv->load();
+        } catch (Exception $e) {
+            //proceed with server environement variables
+        }
+
 
         self::$dbConfig = [
             'driver' => getenv('DB_DRIVER'),
