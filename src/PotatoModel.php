@@ -97,7 +97,7 @@ class PotatoModel extends DatabaseConnection
     /**
      * getAll.
      *
-     * Returns all rows from a table
+     * Returns all records/rows from a table
      *
      * @return array returns an array of rows in a table
      */
@@ -121,10 +121,11 @@ class PotatoModel extends DatabaseConnection
     /**
      * save.
      *
-     * public function that saves a new instance of the child class data into the database
+     * public function that saves a new record or updates an exisiting record
+     * data into the database.
      *
      * Create PDO connection, construct SQL Statement, execute the statement
-     * and return the primary key value of inserted row
+     * and return the primary key value of inserted row.s
      *
      * @return int return the primary key value of inserted row
      */
@@ -162,7 +163,7 @@ class PotatoModel extends DatabaseConnection
      * find.
      *
      * Find takes a unique field ID and returns true if a row is found
-     * and false if a row is not found
+     * and false if a row is not found.
      *
      * @param int $fieldId
      *
@@ -195,9 +196,10 @@ class PotatoModel extends DatabaseConnection
     /**
      * findRecord  Return all rows that meet a certain criteria.
      *
-     * @param  int/array $searchField id field or array of search fields.
+     * @param  int/array $searchField id field or associative
+     * array of search fields.
      *
-     * @return array              Array of rows
+     * @return array              Array of records that match criteria
      */
     public static function findRecord($searchField)
     {
