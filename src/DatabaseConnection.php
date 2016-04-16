@@ -97,7 +97,7 @@ class DatabaseConnection
     }
 
     /**
-     * construct PDO dsn string.
+     * construct PDO dsn string based on the database model in use
      *
      * @codeCoverageIgnore
      */

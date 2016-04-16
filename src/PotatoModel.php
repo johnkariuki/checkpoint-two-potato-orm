@@ -280,7 +280,7 @@ class PotatoModel extends DatabaseConnection
      * @param int $id a unique ID from the table
      *
      * @return bool should return true or false based on
-     *              whether it was deleted or not
+     * whether it was deleted or not
      */
     public static function destroy($fieldId)
     {
